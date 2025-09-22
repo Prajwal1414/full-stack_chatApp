@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-init-script
+  namespace: chatapp
+data:
+  create-user.js: |
+    db = db.getSiblingDB("chatApp");
+    db.createUser({
+      user: "chatappuser",
+      pwd: "chatapppass",
+      roles: [ { role: "readWrite", db: "chatApp" } ]
+    });

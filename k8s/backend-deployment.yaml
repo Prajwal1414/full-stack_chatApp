@@ -1,40 +1,38 @@
+kind: Deployment 
 apiVersion: apps/v1
-kind: Deployment
 metadata:
-  name: backend
-  namespace: chat-app
+  name: chatapp-backend
+  namespace: chatapp
 spec:
-  replicas: 1
   selector:
     matchLabels:
-      app: backend
+      app: chatapp-backend
+  replicas: 1
   template:
     metadata:
-      labels:
-        app: backend
+      name: chatapp-backend
+      namespace: chatapp
+      labels: 
+        app: chatapp-backend
     spec:
       containers:
-      - name: backend
-        image: iemafzal/backend:v1
-        imagePullPolicy: Always
+      - name: chatapp-backend
+        image: prajwalkumar1453/chatapp-backend:latest
         ports:
-        - containerPort: 5001
+          - containerPort: 5001
         env:
-        - name: MONGODB_URI
-          value: "mongodb://root:admin@mongodb:27017/chatApp?authSource=admin"
-        - name: PORT
-          value: "5001"
         - name: NODE_ENV
           value: "production"
+        - name: MONGODB_URI
+          value: "mongodb://chatappuser:chatapppass@mongosvc:27017/chatApp?authSource=chatApp"
+        - name: PORT 
+          value: "5001"
         - name: JWT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: backend-secrets
-              key: jwt-secret
+          value: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE3MzQ3MjA5MzAsImV4cCI6MTc2NjI1NjkzMCwiYXVkIjoidHJhaW53aXRoc2h1YmhhbS5jb20iLCJzdWIiOiJqcm9ja2V0QGV4YW1wbGUuY29tIiwiR2l2ZW5OYW1lIjoiQWZ6YWwiLCJTdXJuYW1lIjoiUm9ja2V0IiwiRW1haWwiOiJqcm9ja2V0QGV4YW1wbGUuY29tIiwiUm9sZSI6WyJEZXZPcHMiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.ehelBbUU2IFJ8M5xzQL_UFatMxCMSojAOqWQaZQgrwk"
         resources:
           limits:
-            memory: "512Mi"
-            cpu: "500m"
+            cpu: 500m
+            memory: 512Mi
           requests:
-            memory: "256Mi"
-            cpu: "250m"
+            cpu: 256m
+            memory: 256Mi
